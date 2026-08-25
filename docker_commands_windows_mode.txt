@@ -1,0 +1,38 @@
+Docker commands - Windows mode
+===============================
+
+Build the image:
+docker build -t collection-program-restapi .
+
+Run the container (maps container port 8000 to host port 8000):
+docker run -p 8000:8000 collection-program-restapi
+
+Run in detached mode (background) with a name:
+docker run -d -p 8000:8000 --name collection-api collection-program-restapi
+
+Run with live code reload, mounting the project folder (PowerShell syntax):
+docker run -p 8000:8000 -v ${PWD}:/app --name collection-api collection-program-restapi
+
+List running containers:
+docker ps
+
+View logs of the running container:
+docker logs -f collection-api
+
+Stop the container:
+docker stop collection-api
+
+Remove the container:
+docker rm collection-api
+
+Remove the image:
+docker rmi collection-program-restapi
+
+Open a shell inside the running container:
+docker exec -it collection-api bash
+
+Rebuild and restart from scratch (stop, remove, rebuild, run):
+docker stop collection-api
+docker rm collection-api
+docker build -t collection-program-restapi .
+docker run -d -p 8000:8000 --name collection-api collection-program-restapi
