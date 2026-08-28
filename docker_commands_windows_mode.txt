@@ -1,38 +1,39 @@
 Docker commands - Windows mode
 ===============================
 
-Build the image:
-docker build -t collection-program-restapi .
+1.Build the image:
+docker build -t collection_program_restapi .
 
-Run the container (maps container port 8000 to host port 8000):
-docker run -p 8000:8000 collection-program-restapi
+2.Run the container (maps container port 8000 to host port 8000):
+docker run -p 5080:8000 --name run_collection_program collection_program_restapi
 
-Run in detached mode (background) with a name:
-docker run -d -p 8000:8000 --name collection-api collection-program-restapi
+3.Run in detached mode (background) with a name:
+docker run -d -p 5080:8000 --name run_collection_program collection_program_restapi
 
-Run with live code reload, mounting the project folder (PowerShell syntax):
-docker run -p 8000:8000 -v ${PWD}:/app --name collection-api collection-program-restapi
+4.Run with live code reload, mounting the project folder (PowerShell syntax):
+docker run -p 5080:8000 -v ${PWD}:/app --name run_collection_program collection_program_restapi
 
-List running containers:
+5.List running containers:
 docker ps
 
-View logs of the running container:
-docker logs -f collection-api
+6.View logs of the running container:
+docker logs -f run_collection_program
+-------------------------------------------------------------------------------------------------
 
 Stop the container:
-docker stop collection-api
+1.docker stop run_collection_program
 
-Remove the container:
-docker rm collection-api
+2.Remove the container:
+docker rm run_collection_program
 
 Remove the image:
-docker rmi collection-program-restapi
+docker rmi collection_program_restapi
 
 Open a shell inside the running container:
-docker exec -it collection-api bash
+docker exec -it run_collection_program bash
 
 Rebuild and restart from scratch (stop, remove, rebuild, run):
-docker stop collection-api
-docker rm collection-api
-docker build -t collection-program-restapi .
-docker run -d -p 8000:8000 --name collection-api collection-program-restapi
+docker stop run_collection_program
+docker rm run_collection_program
+docker build -t collection_program_restapi .
+docker run -d -p 5080:8000 --name run_collection_program collection_program_restapi
