@@ -27,7 +27,7 @@ Stop the container:
 docker rm run_collection_program
 
 Remove the image:
-docker rmi collection_program_restapi
+docker rm collection_program_restapi
 
 Open a shell inside the running container:
 docker exec -it run_collection_program bash
