@@ -23,6 +23,7 @@ class Apartment:
         print("danger, there are romanis here!!")
         print("at which appartment?")
         print(" apartment number ::::" , self.apartment_name)
+        print('hehecjcj')
 
 
     def show_square_meter(self) -> int:

@@ -1,39 +1,34 @@
-Docker commands - Windows mode
-===============================
+1. Build Docker image
 
-1.Build the image:
 docker build -t collection_program_restapi .
 
-2.Run the container (maps container port 8000 to host port 8000):
-docker run -p 5080:8000 --name run_collection_program collection_program_restapi
 
-3.Run in detached mode (background) with a name:
-docker run -d -p 5080:8000 --name run_collection_program collection_program_restapi
+2. Run container
 
-4.Run with live code reload, mounting the project folder (PowerShell syntax):
-docker run -p 5080:8000 -v ${PWD}:/app --name run_collection_program collection_program_restapi
+docker run -d -e PYTHONUNBUFFERED=1 --env-file env_vars.env --name collection_program -p 5080:80 collection_program_restapi
 
-5.List running containers:
-docker ps
 
-6.View logs of the running container:
-docker logs -f run_collection_program
--------------------------------------------------------------------------------------------------
+3. Show logs
 
-Stop the container:
-1.docker stop run_collection_program
+docker logs --tail 100 -f collection_program
 
-2.Remove the container:
-docker rm run_collection_program
 
-Remove the image:
-docker rm collection_program_restapi
+You can also run 1. 2. 3. in one:
 
-Open a shell inside the running container:
-docker exec -it run_collection_program bash
+WITHOUT auto-reload:
+docker build -t collection_program_restapi .; docker run -d -e PYTHONUNBUFFERED=1 --env-file env_vars.env --name collection_program -p 5080:80 collection_program_restapi; docker logs --tail 100 -f collection_program
 
-Rebuild and restart from scratch (stop, remove, rebuild, run):
-docker stop run_collection_program
-docker rm run_collection_program
-docker build -t collection_program_restapi .
-docker run -d -p 5080:8000 --name run_collection_program collection_program_restapi
+WITH auto-reload:
+docker build -t collection_program_restapi .; docker run -d -e PYTHONUNBUFFERED=1 -e WATCHFILES_FORCE_POLLING=true -v C:\Users\gjyli\PycharmProjects\collection_program_restapi:/app --env-file env_vars.env --name collection_program -p 5080:80 collection_program_restapi uvicorn main:app --host 0.0.0.0 --port 80 --reload; docker logs --tail 100 -f collection_program
+
+___________________________________________________________________________________________________
+
+TO STOP IT:
+
+1. docker stop collection_program
+
+2. docker rm collection_program
+
+You can also do both of them in one:
+docker stop collection_program;  docker rm collection_program
+_______________________________________________________________
