@@ -9,12 +9,12 @@ apartment_app = APIRouter()
 apartments: list[Apartment] = []
 
 
-@apartment_app.get("/", summary="List all apartments")
+@apartment_app.get("/show_all_apartments", summary="List all apartments")
 def list_apartments():
     return [vars(apartment) for apartment in apartments]
 
 
-@apartment_app.post("/", summary="Create a new apartment")
+@apartment_app.post("/create_a_new_apartment", summary="Create a new apartment")
 def create_apartment(apartment_in: ApartmentIn):
     apartment = Apartment(
         floor=apartment_in.floor,

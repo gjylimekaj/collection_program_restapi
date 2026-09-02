@@ -7,7 +7,7 @@ class Apartment:
         self.bathrooms = 1
         self.has_a_balcony = True
 
-        self.has_romani = False
+        self.has_foreigner = False
 
 
 
@@ -18,9 +18,9 @@ class Apartment:
         self.bathrooms = number_of_bathrooms
 
 
-    def update_status_with_romani(self) -> None:
-        self.has_romani = True
-        print("danger, there are romanis here!!")
+    def update_status_with_foreigner(self) -> None:
+        self.has_foreigner = True
+        print("A foreigner lives here.")
         print("at which appartment?")
         print(" apartment number ::::" , self.apartment_name)
         print('hehecjcj')

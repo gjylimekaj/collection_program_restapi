@@ -7,7 +7,7 @@ class ApartmentBuilding:
         self.number_of_apartments = number_of_apartments
         self.list_of_apartments = []
 
-        self.number_of_romanis_in_this_building = 0
+        self.number_of_foreigners_in_this_building = 0
 
 
 
@@ -57,7 +57,7 @@ class ApartmentBuilding:
         self.floors = 0
         self.number_of_apartments = 0
         self.list_of_apartments.clear()
-        self.number_of_romanis_in_this_building = 0
+        self.number_of_foreigners_in_this_building = 0
 
 
 

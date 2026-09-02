@@ -2,14 +2,14 @@
 
 
 class HumanClass:
-    def __init__(self, name, age, gender, living_address, civil_status, is_romani=False):
+    def __init__(self, name, age, gender, living_address, civil_status, is_foreigner=False):
         self.name = name
         self.age = age
         self.gender = gender
         self.living_address = living_address
         self.civil_status = civil_status
         
-        self.is_romani = is_romani
+        self.is_foreigner = is_foreigner
 
 
 
