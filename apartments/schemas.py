@@ -8,3 +8,6 @@ class ApartmentIn(BaseModel):
     apartment_name: str
     number_of_rooms: int
     square_meter: float
+    bathrooms: int
+    has_a_balcony: bool
+    has_foreigners: bool
