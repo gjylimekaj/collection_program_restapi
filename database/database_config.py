@@ -18,6 +18,7 @@ from database.base import Base
 # clsregistry KeyError the first time a query touches its relationship.
 from apartments.model import Apartment, ApartmentBuilding  # noqa: E402,F401
 from districts.model import District  # noqa: E402,F401
+from fire_alarms.model import FireAlarm  # noqa: E402,F401
 from humans.model import Human  # noqa: E402,F401
 
 

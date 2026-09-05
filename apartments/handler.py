@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 
 from apartments.apartment_class import Apartment
-from apartments.schemas import ApartmentIn
+from apartments.schemas import ApartmentInScheme
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.database_config import get_async_db_session
@@ -27,7 +27,7 @@ async def get_info_about_one_apartment(apartment_name: str, db: AsyncSession = D
         raise HTTPException(status_code=404, detail="Apartment not found")
 
 @apartment_app.post("/create_a_new_apartment", summary="Create a new apartment")
-async def create_apartment(apartment_in: ApartmentIn, db: AsyncSession = Depends(get_async_db_session)):
+async def create_apartment(apartment_in: ApartmentInScheme, db: AsyncSession = Depends(get_async_db_session)):
     await insert_apartment(apartment_in.floor, apartment_in.apartment_name, apartment_in.number_of_rooms, apartment_in.square_meter,
                            apartment_in.bathrooms, apartment_in.has_a_balcony, apartment_in.has_foreigners,db)
     return "congratulations, just added a new apartment!"

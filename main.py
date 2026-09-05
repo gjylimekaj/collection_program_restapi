@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from apartments.handler import apartment_app
 from districts.handler import district_app
 from humans.handler import humans_app
+from fire_alarms.handler import fire_alarm_app
 
 
 app = FastAPI(
@@ -16,5 +17,6 @@ app = FastAPI(
 app.include_router(apartment_app, prefix="/apartments", tags=["apartments"])
 app.include_router(district_app, prefix="/districts", tags=["districts"])
 app.include_router(humans_app, prefix="/humans", tags=["humans"])
+app.include_router(fire_alarm_app, prefix="/fire_alarm", tags=["fire_alarm"])
 # Middleware setup (CORS)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"], allow_credentials=True)
