@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.database_config import get_async_db_session
 from apartments.crud.crud_insert import insert_apartment
-from apartments.crud.crud_get import get_apartment_from_db
+from apartments.crud.crud_read import get_apartment_from_db
 
 apartment_app = APIRouter()
 

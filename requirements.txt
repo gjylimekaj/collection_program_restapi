@@ -3,5 +3,6 @@ uvicorn[standard]==0.30.6
 SQLAlchemy==2.0.35
 mysql-connector-python==26.7.0
 aiomysql==0.3.2
+cryptography==43.0.1
 python-dotenv==1.2.3
 redis==8.1.0
