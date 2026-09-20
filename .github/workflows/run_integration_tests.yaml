@@ -37,7 +37,7 @@ jobs:
           ENVIRONMENT: production
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
-          DATABASE_USER_PASSWORD: ${{ secrets.DATABASE_USER_PASSWORD }}
+          DATABASE_USER_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
           DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
           FIRE_ALARM_ADMIN_CODE: test-admin-code
