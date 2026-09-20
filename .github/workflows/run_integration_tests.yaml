@@ -1,0 +1,45 @@
+name: Run integration tests
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"   # same version as the Dockerfile
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run integration tests
+        env:
+          # env_vars.env is gitignored, so CI gets the DB settings from GitHub
+          # Secrets (Settings -> Secrets and variables -> Actions).
+          ENVIRONMENT: production
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_USER_PASSWORD: ${{ secrets.DATABASE_USER_PASSWORD }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+          FIRE_ALARM_ADMIN_CODE: test-admin-code
+          RUN_DB_TESTS: "1"   # opt in to tests/db_integration (real database)
+        run: pytest tests/integration tests/db_integration -v
