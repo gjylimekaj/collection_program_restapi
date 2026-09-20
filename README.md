@@ -22,6 +22,8 @@ The API is built around five related entities:
 - **Redis** — available for caching (sync and async connection helpers)
 - **Uvicorn** — ASGI server
 - **Docker** — containerized deployment
+- **pytest** + **httpx** — unit and integration tests
+- **GitHub Actions** — continuous integration
 
 ## Project structure
 
@@ -29,9 +31,11 @@ The API is built around five related entities:
 apartments/    apartment & apartment building models, schemas, CRUD, routes
 districts/     district models, schemas, CRUD, routes
 humans/        resident models, schemas, CRUD, routes
-fire_alarms/   fire alarm model
+fire_alarms/   fire alarm model, schemas, CRUD, routes
 database/      SQLAlchemy base, engine, and session configuration
 docs/          ER diagram and other documentation assets
+tests/         unit, integration and real-database tests
+.github/       CI workflows (GitHub Actions)
 main.py        FastAPI app setup and router registration
 ```
 
@@ -61,6 +65,9 @@ Each domain module follows the same layout: `model.py` (SQLAlchemy model), `sche
    DATABASE_USER=<your-database-user>
    DATABASE_USER_PASSWORD=<your-database-password>
    DATABASE_NAME=<your-database-name>
+
+   # Password required by POST /fire_alarm/register_alarm
+   FIRE_ALARM_ADMIN_CODE=<your-admin-code>
    ```
 
    > **Never commit real credentials.** `env_vars.env` is listed in `.gitignore` — keep it that way.
@@ -104,5 +111,51 @@ See [docker_commands_windows_mode.txt](docker_commands_windows_mode.txt) for a W
 | POST | `/apartments/create_a_new_apartment` | Create a new apartment |
 | GET | `/districts/show_all_districts` | List all districts |
 | POST | `/districts/create_a_new_district` | Create a new district |
+| POST | `/fire_alarm/register_alarm` | Register a fire alarm for a building (by address) |
+
+`/fire_alarm/register_alarm` expects a JSON body with `address`, `apartment_floor_id` and `admin_password`. It returns `400` if the password doesn't match `FIRE_ALARM_ADMIN_CODE` or the address doesn't exist.
 
 Full, always-up-to-date API documentation is available at the root URL (`/`) once the server is running.
+
+## Testing
+
+Install the dev dependencies (pytest, httpx, aiosqlite) first:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+The tests live in three folders:
+
+| Folder | What it tests | Database |
+|---|---|---|
+| `tests/unit/` | Plain classes (apartment, building, district, human) | none |
+| `tests/integration/` | API routes, called in-process with httpx (no server is started) | in-memory SQLite, recreated for every test |
+| `tests/db_integration/` | The same kind of API tests against the **real MySQL database** | your `DATABASE_*` settings |
+
+Run the unit and SQLite integration tests (the default; the real-database tests are skipped):
+
+```bash
+pytest
+```
+
+Run the real-database tests. They are opt-in, so a plain `pytest` never touches your database:
+
+```bash
+# PowerShell
+$env:RUN_DB_TESTS="1"; pytest tests/db_integration -v
+
+# bash
+RUN_DB_TESTS=1 pytest tests/db_integration -v
+```
+
+The real-database tests never create or drop tables. Each test creates rows with a unique `pytest-<random>-` name prefix (the `test_prefix` fixture) and deletes only those rows afterwards. Use that fixture for any new test in this folder.
+
+## Continuous integration
+
+Two GitHub Actions workflows in `.github/workflows/` run on every push to any branch and on pull requests into `main`:
+
+- `run_unit_tests.yaml` runs `tests/unit`.
+- `run_integration_tests.yaml` runs `tests/integration` and `tests/db_integration`.
+
+The integration workflow reads its database settings from GitHub repository secrets (Settings → Secrets and variables → Actions): `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD` (mapped to `DATABASE_USER_PASSWORD`) and `DATABASE_NAME`. If the database has a firewall / trusted-sources list, GitHub's runners must be allowed to connect.
