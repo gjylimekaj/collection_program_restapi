@@ -1,0 +1,44 @@
+name: Run tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"   # same version as the Dockerfile
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run unit and integration tests
+        env:
+          # env_vars.env is gitignored, so CI has no DB settings. The tests use
+          # in-memory SQLite, but database_config.py builds the MySQL URL at
+          # import time and fails on empty values - these are dummies only.
+          ENVIRONMENT: production
+          DATABASE_NAME: test
+          DATABASE_USER: test
+          DATABASE_USER_PASSWORD: test
+          DATABASE_HOST: localhost
+          DATABASE_PORT: "3306"
+          FIRE_ALARM_ADMIN_CODE: test-admin-code
+        run: pytest -v
