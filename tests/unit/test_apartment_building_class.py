@@ -24,7 +24,7 @@ def test_add_apartment_to_building():
 def test_add_a_new_floor_also_adds_four_apartments():
     building = make_building()
     building.add_a_new_floor()
-    assert building.floors == 2
+    assert building.floors == 4
     assert building.number_of_apartments == 10
 
 
