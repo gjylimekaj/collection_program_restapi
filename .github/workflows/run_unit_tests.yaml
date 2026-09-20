@@ -1,4 +1,4 @@
-name: Run tests
+name: Run unit tests
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,16 +30,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Run unit and integration tests
-        env:
-          # env_vars.env is gitignored, so CI has no DB settings. The tests use
-          # in-memory SQLite, but database_config.py builds the MySQL URL at
-          # import time and fails on empty values - these are dummies only.
-          ENVIRONMENT: production
-          DATABASE_NAME: test
-          DATABASE_USER: test
-          DATABASE_USER_PASSWORD: test
-          DATABASE_HOST: localhost
-          DATABASE_PORT: "3306"
-          FIRE_ALARM_ADMIN_CODE: test-admin-code
-        run: pytest -v
+      - name: Run unit tests
+        run: pytest tests/unit -v

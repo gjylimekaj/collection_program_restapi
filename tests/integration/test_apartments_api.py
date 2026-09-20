@@ -22,4 +22,5 @@ async def test_create_and_get_apartment(client):
 
 async def test_get_unknown_apartment_returns_404(client):
     response = await client.get("/apartments/get_info_about_one_apartment/does-not-exist")
+    #---
     assert response.status_code == 404
